@@ -26,15 +26,35 @@ router.get("/:email",(req,res)=>{
 
 // POST request: Add a new friend
 router.post("/",(req,res)=>{
-  // Update the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+  const newUser = req.body;
+  if(newUser.email) {
+    friends[newUser.email] = {
+      'firstName': newUser.firstName,
+      'lastName' : newUser.lastName,
+      'DOB' : newUser.DOB
+    }
+    res.send(`User ${newUser.firstName} ${newUser.lastName} has been added:\n ${JSON.stringify(newUser, null,4)}`)
+  }
+  res.send(`Did not add user.\n ${JSON.stringify(req.body, null, 4)}`)
 });
 
 
 // PUT request: Update the details of a friend with email id
 router.put("/:email", (req, res) => {
-  // Update the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+  const email = req.params.email;
+  const friend = friends[email];
+
+  if(friend){
+    const newDetails = req.body;
+    const updatedFriend = {
+      ...friend,
+      ...newDetails
+    }
+    
+    friends[email] = updatedFriend;
+    res.send(`User at ${email} has been updated: \n ${JSON.stringify(updatedFriend,null,4)}`)
+  }
+  res.send("This user does not exist")
 });
 
 
